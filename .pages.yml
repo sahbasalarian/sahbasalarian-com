@@ -1,208 +1,136 @@
-module.exports = {
-  // Site configuration
-  title: "Astro Nano CMS",
-  description: "Content management for Astro Nano theme",
-  
-  // Base path for content
-  content: "src/content",
-  
-  // Collections configuration
-  collections: [
-    {
-      name: "blog",
-      label: "Blog Posts",
-      description: "Manage blog posts and articles",
-      path: "src/content/blog",
-      format: "md",
-      create: true,
-      delete: true,
-      slug: "{{fields.title}}",
-      fields: [
-        {
-          name: "title",
-          label: "Title",
-          type: "string",
-          required: true,
-          hint: "The title of your blog post"
-        },
-        {
-          name: "description",
-          label: "Description",
-          type: "string",
-          required: true,
-          hint: "Brief description used in SEO and post previews"
-        },
-        {
-          name: "date",
-          label: "Publish Date",
-          type: "date",
-          required: true,
-          default: "{{now}}"
-        },
-        {
-          name: "draft",
-          label: "Draft",
-          type: "boolean",
-          required: false,
-          default: false,
-          hint: "Mark as draft to hide from public view"
-        },
-        {
-          name: "body",
-          label: "Content",
-          type: "markdown",
-          required: true
-        }
-      ]
-    },
-    {
-      name: "projects",
-      label: "Projects",
-      description: "Showcase your projects and work",
-      path: "src/content/projects",
-      format: "md",
-      create: true,
-      delete: true,
-      slug: "{{fields.title}}",
-      fields: [
-        {
-          name: "title",
-          label: "Project Title",
-          type: "string",
-          required: true,
-          hint: "Name of your project"
-        },
-        {
-          name: "description",
-          label: "Description",
-          type: "string",
-          required: true,
-          hint: "Brief description of the project"
-        },
-        {
-          name: "date",
-          label: "Project Date",
-          type: "date",
-          required: true,
-          hint: "When the project was completed or published"
-        },
-        {
-          name: "draft",
-          label: "Draft",
-          type: "boolean",
-          required: false,
-          default: false,
-          hint: "Mark as draft to hide from public view"
-        },
-        {
-          name: "demoURL",
-          label: "Demo URL",
-          type: "string",
-          required: false,
-          hint: "Live demo link (optional)"
-        },
-        {
-          name: "repoURL",
-          label: "Repository URL",
-          type: "string",
-          required: false,
-          hint: "Source code repository link (optional)"
-        },
-        {
-          name: "body",
-          label: "Content",
-          type: "markdown",
-          required: true
-        }
-      ]
-    },
-    {
-      name: "work",
-      label: "Work Experience",
-      description: "Manage your professional experience",
-      path: "src/content/work",
-      format: "md",
-      create: true,
-      delete: true,
-      slug: "{{fields.company}}",
-      fields: [
-        {
-          name: "company",
-          label: "Company",
-          type: "string",
-          required: true,
-          hint: "Company or organization name"
-        },
-        {
-          name: "role",
-          label: "Role/Position",
-          type: "string",
-          required: true,
-          hint: "Your job title or role"
-        },
-        {
-          name: "dateStart",
-          label: "Start Date",
-          type: "date",
-          required: true,
-          hint: "When you started this position"
-        },
-        {
-          name: "dateEnd",
-          label: "End Date",
-          type: "string",
-          required: true,
-          hint: "End date or 'Present' for current positions"
-        },
-        {
-          name: "body",
-          label: "Description",
-          type: "markdown",
-          required: true,
-          hint: "Describe your responsibilities and achievements"
-        }
-      ]
-    }
-  ],
-  
-  // Media configuration
-  media: {
-    input: "public",
-    output: "public"
-  },
-  
-  // UI customization
-  ui: {
-    brand: {
-      title: "Astro Nano",
-      logo: "/favicon-light.svg"
-    },
-    colors: {
-      primary: "#1f2937",
-      accent: "#3b82f6"
-    }
-  },
-  
-  // Editor configuration
-  editor: {
-    preview: true,
-    wysiwyg: false,
-    toolbar: [
-      "bold",
-      "italic",
-      "strikethrough",
-      "link",
-      "code",
-      "quote",
-      "unordered-list",
-      "ordered-list",
-      "clean"
-    ]
-  },
-  
-  // Build configuration
-  build: {
-    outputDir: "dist",
-    publicPath: "/"
-  }
-}
+media:
+  input: public
+  output: /
+
+content:
+  - name: blog
+    label: Blog Posts
+    type: collection
+    path: src/content/blog
+    format: yaml-frontmatter
+    filename: '{title}/index.md'
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+        description: The title of your blog post
+      - name: description
+        label: Description
+        type: string
+        required: true
+        description: Brief description used in SEO and post previews
+      - name: date
+        label: Publish Date
+        type: date
+        required: true
+        description: When the post was published
+      - name: draft
+        label: Draft
+        type: boolean
+        required: false
+        default: false
+        description: Mark as draft to hide from public view
+      - name: body
+        label: Content
+        type: rich-text
+        required: true
+        description: The main content of your blog post
+    view:
+      fields: [title, date, draft]
+      primary: title
+      sort: [date, title]
+      default:
+        sort: date
+        order: desc
+
+  - name: projects
+    label: Projects
+    type: collection
+    path: src/content/projects
+    format: yaml-frontmatter
+    filename: '{title}/index.md'
+    fields:
+      - name: title
+        label: Project Title
+        type: string
+        required: true
+        description: Name of your project
+      - name: description
+        label: Description
+        type: string
+        required: true
+        description: Brief description of the project
+      - name: date
+        label: Project Date
+        type: date
+        required: true
+        description: When the project was completed or published
+      - name: draft
+        label: Draft
+        type: boolean
+        required: false
+        default: false
+        description: Mark as draft to hide from public view
+      - name: demoURL
+        label: Demo URL
+        type: string
+        required: false
+        description: Live demo link (optional)
+      - name: repoURL
+        label: Repository URL
+        type: string
+        required: false
+        description: Source code repository link (optional)
+      - name: body
+        label: Content
+        type: rich-text
+        required: true
+        description: Detailed description of your project
+    view:
+      fields: [title, date, draft, demoURL, repoURL]
+      primary: title
+      sort: [date, title]
+      default:
+        sort: date
+        order: desc
+
+  - name: work
+    label: Work Experience
+    type: collection
+    path: src/content/work
+    format: yaml-frontmatter
+    filename: '{company}.md'
+    fields:
+      - name: company
+        label: Company
+        type: string
+        required: true
+        description: Company or organization name
+      - name: role
+        label: Role/Position
+        type: string
+        required: true
+        description: Your job title or role
+      - name: dateStart
+        label: Start Date
+        type: date
+        required: true
+        description: When you started this position
+      - name: dateEnd
+        label: End Date
+        type: string
+        required: true
+        description: End date or 'Present' for current positions
+      - name: body
+        label: Description
+        type: rich-text
+        required: true
+        description: Describe your responsibilities and achievements
+    view:
+      fields: [company, role, dateStart, dateEnd]
+      primary: company
+      sort: [dateStart, company]
+      default:
+        sort: dateStart
+        order: desc
